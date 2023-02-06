@@ -149,14 +149,20 @@ class State:
         :type depth: int
         :param parent: The parent of current state.
         :type parent: Optional[State]
+        :param succ: The successor states of current state.
+        :type succ: Optional[List[State]]
         """
         self.board = board
         self.f = f
         self.depth = depth
         self.parent = parent
         self.id = hash(board)  # The id for breaking ties.
+        self.succ = []
+        for i in range(5):
+            self.succ.append()
 
-
+def isGoal(self):
+    return 
 def read_from_file(filename):
     """
     Load initial board from a given file.
@@ -198,6 +204,112 @@ def read_from_file(filename):
     return board
 
 
+def isGoal(state):
+    if state.board.grid[3][1] == char_goal and state.board.grid[4][2] == char_goal: 
+        return True 
+    return False
+def generateSuccessors(state):
+        succs = Queue()
+        for m in self.state.moves:
+            p = deepcopy(self.state)
+            p.doMove(m) 
+            if p.zero is not self.state.zero:
+                succs.put(Node(p, self, m))
+        return succs
+
+def dfs(initialState):
+    depth = 0
+    result = None
+    while result == None:
+        result = depthLimited(initialState,2)
+        depth +=1
+    return result
+    
+
+def depthLimited(state, depth):
+    frontier = []
+    frontier.append(state)
+    i=0
+    while True:
+        if len(frontier) == 0:
+            return None
+        actual = frontier.pop()
+        if isGoal(actual):
+            return actual
+        elif actual.depth != depth:
+            succ = generateSuccessors(state)
+            while not len(succ) == 0:
+                frontier.append(succ.pop())
+        
+
+# def aSearch(self, heuristic):
+#     actual = self.start
+#     leaves = PriorityQueue()
+#     leaves.put((actual.costHeur(heuristic), actual))
+#     closed = list()
+#     while True:
+#         if leaves.empty():
+#             return None
+#         actual = leaves.get()[1]
+#         if actual.goalState():
+#             return actual
+#         elif actual.state.puzzle not in closed:
+#             closed.append(actual.state.puzzle)
+#             succ = actual.succ()
+#             while not succ.empty():
+#                 child = succ.get()
+#                 leaves.put((child.costHeur(heuristic)+child.depth, child))
+
+def reconstruct_path(cameFrom, current):
+    total_path = {current}
+    while current in cameFrom.Keys:
+        current = cameFrom[current]
+        total_path[current]
+    return total_path
+
+# A* finds a path from start to goal.
+# h is the heuristic function. h(n) estimates the cost to reach goal from node n.
+def A_Star(start, goal, h):
+    # The set of discovered nodes that may need to be (re-)expanded.
+    # Initially, only the start node is known.
+    # This is usually implemented as a min-heap or priority queue rather than a hash-set.
+    frontier = []
+
+    # For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from start
+    # to n currently known.
+    cameFrom = {}
+
+    # For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
+    gScore = {float('inf')}
+    gScore[start] = 0
+
+    # For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
+    # how cheap a path could be from start to finish if it goes through n.
+    fScore = {float('inf')}
+    fScore[start] = h(start)
+
+    while frontier.length != 0:
+        # This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
+        current = frontier[0]
+        if current == goal:
+            return reconstruct_path(cameFrom, current)
+
+        heappop(frontier)
+        # for each neighbor of current
+        #     // d(current,neighbor) is the weight of the edge from current to neighbor
+        #     // tentative_gScore is the distance from start to the neighbor through current
+        #     tentative_gScore := gScore[current] + d(current, neighbor)
+        #     if tentative_gScore < gScore[neighbor]
+        #         // This path to neighbor is better than any previous one. Record it!
+        #         cameFrom[neighbor] := current
+        #         gScore[neighbor] := tentative_gScore
+        #         fScore[neighbor] := tentative_gScore + h(neighbor)
+        #         if neighbor not in openSet
+        #             openSet.add(neighbor)
+
+    # // Open set is empty but goal was never reached
+    # return failure
+
 
 if __name__ == "__main__":
 
@@ -225,6 +337,8 @@ if __name__ == "__main__":
 
     # read the board from the file
     board = read_from_file(args.inputfile)
+    state = State(board, 0, 0, None)
+    dfs(state)
     
 
 
