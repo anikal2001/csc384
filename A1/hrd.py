@@ -123,7 +123,9 @@ class Board:
             for ch in line:
                 print(ch, end='')
             print()
-
+    
+    def isValid(self):
+        pass
 
     def emptySpace(self):
         for row in self.grid:
@@ -208,9 +210,10 @@ def isGoal(state):
     if state.board.grid[3][1] == char_goal and state.board.grid[4][2] == char_goal: 
         return True 
     return False
+
 def generateSuccessors(state):
-        succs = Queue()
-        for m in self.state.moves:
+        succs = []
+        for m in state.moves:
             p = deepcopy(self.state)
             p.doMove(m) 
             if p.zero is not self.state.zero:
